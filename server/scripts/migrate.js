@@ -9,11 +9,11 @@ async function runMigrations() {
   
   // Ensure we can execute multiple statements
   const connection = await mysql.createConnection({
-    host: process.env.DB_HOST || 'localhost',
-    port: parseInt(process.env.DB_PORT, 10) || 3306,
-    user: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || '',
-    database: process.env.DB_NAME || 'devlens_ai',
+    host: process.env.MYSQLHOST || process.env.DB_HOST || 'localhost',
+    port: parseInt(process.env.MYSQLPORT || process.env.DB_PORT, 10) || 3306,
+    user: process.env.MYSQLUSER || process.env.DB_USER || 'root',
+    password: process.env.MYSQLPASSWORD || process.env.DB_PASSWORD || '',
+    database: process.env.MYSQLDATABASE || process.env.DB_NAME || 'devlens_ai',
     multipleStatements: true
   });
 
