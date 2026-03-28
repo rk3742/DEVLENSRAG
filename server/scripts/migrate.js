@@ -9,16 +9,27 @@ async function runMigrations() {
   
   const connectionString = process.env.MYSQL_URL || process.env.DATABASE_URL;
 
-  const connectionOptions = connectionString 
-    ? { ...mysql.parseConnectionUrl(connectionString), multipleStatements: true }
-    : {
-        host: process.env.MYSQLHOST || process.env.DB_HOST || 'localhost',
-        port: parseInt(process.env.MYSQLPORT || process.env.DB_PORT, 10) || 3306,
-        user: process.env.MYSQLUSER || process.env.DB_USER || 'root',
-        password: process.env.MYSQLPASSWORD || process.env.DB_PASSWORD || '',
-        database: process.env.MYSQLDATABASE || process.env.DB_NAME || 'devlens_ai',
-        multipleStatements: true
-      };
+  let connectionOptions;
+  if (connectionString) {
+    const parsed = new URL(connectionString);
+    connectionOptions = {
+      host: parsed.hostname,
+      port: parseInt(parsed.port, 10) || 3306,
+      user: parsed.username,
+      password: parsed.password,
+      database: parsed.pathname.replace(/^\//, ''),
+      multipleStatements: true
+    };
+  } else {
+    connectionOptions = {
+      host: process.env.MYSQLHOST || process.env.DB_HOST || 'localhost',
+      port: parseInt(process.env.MYSQLPORT || process.env.DB_PORT, 10) || 3306,
+      user: process.env.MYSQLUSER || process.env.DB_USER || 'root',
+      password: process.env.MYSQLPASSWORD || process.env.DB_PASSWORD || '',
+      database: process.env.MYSQLDATABASE || process.env.DB_NAME || 'devlens_ai',
+      multipleStatements: true
+    };
+  }
 
   const connection = await mysql.createConnection(connectionOptions);
 
