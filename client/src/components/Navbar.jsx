@@ -40,7 +40,10 @@ export default function Navbar() {
             </li>
             {!token && (
               <li className="nav-item ms-lg-2">
-                 <button onClick={() => window.location.href = 'http://localhost:5000/api/auth/github'} className="btn btn-outline-light border-light border-opacity-10 rounded-pill px-4 py-2 d-flex align-items-center gap-2 transition-all hover-white fw-bold">
+                 <button onClick={() => {
+                   const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+                   window.location.href = `${baseUrl}/auth/github`;
+                 }} className="btn btn-outline-light border-light border-opacity-10 rounded-pill px-4 py-2 d-flex align-items-center gap-2 transition-all hover-white fw-bold">
                     <FaGithub size={18} />
                     Login
                  </button>

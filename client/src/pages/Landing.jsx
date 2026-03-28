@@ -67,7 +67,10 @@ export default function Landing() {
               <Link to="/dashboard" className="btn btn-primary btn-lg rounded-pill px-5 py-3 fw-bold d-flex align-items-center gap-2" style={{ transition: 'transform 0.2s', boxShadow: '0 4px 20px rgba(13, 110, 253, 0.4)' }}>
                 <FaRocket /> Start Analyzing
               </Link>
-              <button onClick={() => window.location.href = 'http://localhost:5000/api/auth/github'} className="btn btn-light btn-lg rounded-pill px-5 py-3 fw-bold d-flex align-items-center gap-2" style={{ transition: 'transform 0.2s' }}>
+              <button onClick={() => {
+                const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+                window.location.href = `${baseUrl}/auth/github`;
+              }} className="btn btn-light btn-lg rounded-pill px-5 py-3 fw-bold d-flex align-items-center gap-2" style={{ transition: 'transform 0.2s' }}>
                 <FaGithub /> Login with GitHub
               </button>
             </div>
