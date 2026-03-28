@@ -80,7 +80,7 @@ async function cloneRepo({ cloneUrl, destPath, branch, shallow = true }) {
       timeout: {
         block: CLONE_TIMEOUT_MS,
       },
-    });
+    }).env({ ...process.env, GIT_TERMINAL_PROMPT: '0' });
 
     const cloneOptions = [];
     if (shallow) {

@@ -227,7 +227,7 @@ async function analyzeRepo(req, res, next) {
       throw new AppError('githubUrl is required', 400, 'MISSING_FIELD');
     }
 
-    const token = githubToken || process.env.GITHUB_TOKEN;
+    const token = githubToken || req.user?.accessToken || process.env.GITHUB_TOKEN;
     if (!token) {
       throw new AppError('GitHub token is required', 400, 'MISSING_TOKEN');
     }
