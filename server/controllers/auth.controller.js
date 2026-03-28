@@ -16,7 +16,8 @@ function githubLogin(req, res) {
     return res.redirect(`${process.env.FRONTEND_URL || 'http://localhost:3000'}/dashboard?token=mock_dev_token_12345`);
   }
 
-  const redirectUri = `http://${req.headers.host}/api/auth/github/callback`;
+  const protocol = req.headers['x-forwarded-proto'] || req.protocol || 'http';
+  const redirectUri = `${protocol}://${req.headers.host}/api/auth/github/callback`;
   const githubAuthUrl = `https://github.com/login/oauth/authorize?client_id=${process.env.GITHUB_CLIENT_ID}&redirect_uri=${redirectUri}&scope=read:user user:email repo`;
   
   res.redirect(githubAuthUrl);
