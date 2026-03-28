@@ -7,15 +7,20 @@ const logger = require('../utils/logger');
 async function runMigrations() {
   logger.info('Starting automatic database migrations...');
   
-  // Ensure we can execute multiple statements
-  const connection = await mysql.createConnection({
-    host: process.env.MYSQLHOST || process.env.DB_HOST || 'localhost',
-    port: parseInt(process.env.MYSQLPORT || process.env.DB_PORT, 10) || 3306,
-    user: process.env.MYSQLUSER || process.env.DB_USER || 'root',
-    password: process.env.MYSQLPASSWORD || process.env.DB_PASSWORD || '',
-    database: process.env.MYSQLDATABASE || process.env.DB_NAME || 'devlens_ai',
-    multipleStatements: true
-  });
+  const connectionString = process.env.MYSQL_URL || process.env.DATABASE_URL;
+
+  const connectionOptions = connectionString 
+    ? { ...mysql.parseConnectionUrl(connectionString), multipleStatements: true }
+    : {
+        host: process.env.MYSQLHOST || process.env.DB_HOST || 'localhost',
+        port: parseInt(process.env.MYSQLPORT || process.env.DB_PORT, 10) || 3306,
+        user: process.env.MYSQLUSER || process.env.DB_USER || 'root',
+        password: process.env.MYSQLPASSWORD || process.env.DB_PASSWORD || '',
+        database: process.env.MYSQLDATABASE || process.env.DB_NAME || 'devlens_ai',
+        multipleStatements: true
+      };
+
+  const connection = await mysql.createConnection(connectionOptions);
 
   try {
     const migrationsDir = path.join(__dirname, '../migrations');
